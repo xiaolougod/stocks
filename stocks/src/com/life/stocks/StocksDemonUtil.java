@@ -7,6 +7,8 @@ import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.life.stocks._interface.Sina_Interface;
+
 public class StocksDemonUtil
 {
   public static void main(String[] args)
@@ -21,7 +23,7 @@ public class StocksDemonUtil
           str = "sh" + str;
         }
         String urlStr = "http://hq.sinajs.cn/list=" + str;
-        String str_value = getURLContent(urlStr);
+        String str_value = Sina_Interface.getURLContent(urlStr);
         String[] strvalue = str_value.split("=")[1].replace('"', ' ').split(",");
         Float kaipan = Float.valueOf(strvalue[2]);
         Float danqian = Float.valueOf(strvalue[3]);
@@ -45,43 +47,5 @@ public class StocksDemonUtil
         e.printStackTrace();
       }
     }
-  }
-
-  public static String getURLContent(String urlStr)
-  {
-    URL url = null;
-    HttpURLConnection httpConn = null;
-    BufferedReader in = null;
-    StringBuffer sb = new StringBuffer();
-    try {
-      url = new URL(urlStr);
-      in = new BufferedReader(new InputStreamReader(url.openStream(), "GBK"));
-      String str = null;
-      while ((str = in.readLine()) != null)
-        sb.append(str);
-    }
-    catch (Exception localException)
-    {
-      try
-      {
-        if (in != null)
-          in.close();
-      }
-      catch (IOException localIOException)
-      {
-      }
-    }
-    finally
-    {
-      try
-      {
-        if (in != null)
-          in.close();
-      }
-      catch (IOException localIOException1) {
-      }
-    }
-    String result = sb.toString();
-    return result;
   }
 }
