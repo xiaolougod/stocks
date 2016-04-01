@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.life.stocks.Util.MysqlConnectionPool;
@@ -52,8 +51,8 @@ public class Stocks_attitude_hxw {
 			//ÌÚÑ¶¹ÉÆ±
 			StocksattitudeUtil stocksattitudeUtil_tx_g = new StocksattitudeUtil();
 			stocksattitudeUtil_tx_g.setUrl("http://gu.qq.com/" + str_city);
-			String tx_up = stocksattitudeUtil_tx_g.getJsString("up");
-			String tx_down = stocksattitudeUtil_tx_g.getJsString("down");
+			String tx_up = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .comment_left >span .up",false);
+			String tx_down = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .comment_left >span .up",false);
 			System.out.println(tx_up+"##"+tx_down);
 		}
 

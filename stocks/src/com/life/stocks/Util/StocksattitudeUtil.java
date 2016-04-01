@@ -8,11 +8,27 @@ public class StocksattitudeUtil {
 
 	private String url;
 
-	public String getJsString(String role) {
+	public String getJsStringByClassName(String role,Boolean enablejs) {
 		HtmlUnitDriver driver = new HtmlUnitDriver();
-		driver.setJavascriptEnabled(true);
+		driver.setJavascriptEnabled(enablejs);
 		driver.get(url);
 		WebElement element = driver.findElement(By.className(role));
+		return element.getText();
+	}
+	
+	public String getJsStringByXpath(String role,Boolean enablejs) {
+		HtmlUnitDriver driver = new HtmlUnitDriver();
+		driver.setJavascriptEnabled(enablejs);
+		driver.get(url);
+		WebElement element = driver.findElement(By.xpath(role));
+		return element.getText();
+	}
+	
+	public String getJsStringByCSS(String role,Boolean enablejs) {
+		HtmlUnitDriver driver = new HtmlUnitDriver();
+		driver.setJavascriptEnabled(enablejs);
+		driver.get(url);
+		WebElement element = driver.findElement(By.cssSelector(role));
 		return element.getText();
 	}
 
