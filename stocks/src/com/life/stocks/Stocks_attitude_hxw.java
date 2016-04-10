@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import com.life.stocks.Util.MysqlConnectionPool;
@@ -16,8 +17,8 @@ import com.mysql.jdbc.Statement;
 public class Stocks_attitude_hxw {
 
 	static {
-		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache.http").setLevel(Level.OFF);
 	}
 	static MysqlConnectionPool pool = MysqlConnectionPool.getInstance();
 
@@ -45,15 +46,15 @@ public class Stocks_attitude_hxw {
 //			// 东方财富热线帖数和关注数 
 //			StocksattitudeUtil stocksattitudeUtil_df_g = new StocksattitudeUtil();
 //			stocksattitudeUtil_df_g.setUrl("http://guba.eastmoney.com/list," + str + ".html");
-//			String df_g = stocksattitudeUtil_df_g.getJsString("strongc1");
-//			String df_t = stocksattitudeUtil_df_g.getJsString("pager").split(" ")[1];
-
+//			String df_g = stocksattitudeUtil_df_g.getJsStringByClassName("strongc1",true);
+//			String df_t = stocksattitudeUtil_df_g.getJsStringByClassName("pager",true).split(" ")[1];
+//			System.out.println(df_g+"##############################"+df_t);
 			//腾讯股票
 			StocksattitudeUtil stocksattitudeUtil_tx_g = new StocksattitudeUtil();
 			stocksattitudeUtil_tx_g.setUrl("http://gu.qq.com/" + str_city);
-			String tx_up = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .comment_left >span .up",false);
-			String tx_down = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .comment_left >span .up",false);
-			System.out.println(tx_up+"##"+tx_down);
+			String tx_up = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment  .bar_up .up",true);
+			String tx_down = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .bar_down .down",true);
+			System.out.println(tx_up+"##############################"+tx_down);
 		}
 
 		// for (String sql : sql_list) {

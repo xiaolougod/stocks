@@ -1,7 +1,9 @@
 package com.life.stocks.Util;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class StocksattitudeUtil {
@@ -31,6 +33,9 @@ public class StocksattitudeUtil {
 		WebElement element = driver.findElement(By.cssSelector(role));
 		return element.getText();
 	}
+	
+	
+
 
 	public static void main(String[] args) {
 		// ºÍÑ¶Íø
