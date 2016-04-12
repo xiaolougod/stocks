@@ -38,7 +38,7 @@ public class StocksattitudeUtil {
 
 
 	public static void main(String[] args) {
-		// ºÍÑ¶Íø
+		// ï¿½ï¿½Ñ¶ï¿½ï¿½
 //		StocksattitudeUtil s_attitude = new StocksattitudeUtil();
 //		 s_attitude.setUrl("http://guba.hexun.com/000007,guba.html");
 //		 String st=s_attitude.getJsString("pageText");

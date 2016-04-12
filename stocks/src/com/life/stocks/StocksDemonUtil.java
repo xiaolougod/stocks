@@ -14,7 +14,7 @@ public class StocksDemonUtil
   public static void main(String[] args)
   {
     int count = 0;
-    String[] array = { "000005", "002575", "sh000001", "600713" };
+    String[] array = { "000005", "002575", "sh000001", "600713", "sz300431"  };
     while (true) {
       for (String str : array) {
         if (str.substring(0, 2).equals("00"))

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author 		loukangwei
  * @typename	Stocks_everyday_detail
- * @desc		获取股票每日价格交易量等数据
+ * @desc		鑾峰彇鑲＄エ姣忔棩浠锋牸浜ゆ槗閲忕瓑鏁版嵁
  */
 public class Stocks_everyday_detail {
 	static MysqlConnectionPool pool = MysqlConnectionPool.getInstance();
@@ -34,7 +34,6 @@ public class Stocks_everyday_detail {
 			sql_list.add(sql_pre + "('" + str.substring(2) + "','" + strvalue[1] + "','" + strvalue[2] + "','"
 					+ strvalue[4] + "','" + strvalue[5] + "','" + strvalue[8] + "','" + strvalue[9] + "','"
 					+ strvalue[30] + "');");
-
 			System.out.println(count++);
 		}
 

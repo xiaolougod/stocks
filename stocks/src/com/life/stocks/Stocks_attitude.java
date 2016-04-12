@@ -4,17 +4,26 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.lang3.text.StrMatcher;
+
+import com.life.stocks.Util.HttpClientPostUtil;
 import com.life.stocks.Util.MysqlConnectionPool;
 import com.life.stocks.Util.StocksattitudeUtil;
+import com.life.stocks.Util._Mysqlcommon;
+import com.life.stocks.businessachieve.StocksAttitudeAchieve;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.ResultSet;
 import com.mysql.jdbc.Statement;
 
-public class Stocks_attitude_hxw {
+public class Stocks_attitude {
 
 	static {
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
@@ -23,46 +32,39 @@ public class Stocks_attitude_hxw {
 	static MysqlConnectionPool pool = MysqlConnectionPool.getInstance();
 
 	Connection conn = null;
-
 	public static void main(String[] args) {
-		Stocks_attitude_hxw s = new Stocks_attitude_hxw();
+		List<String> list_str = null;
+		Stocks_attitude s = new Stocks_attitude();
 		List<String> list = s.getStocksCodeList("select * from stocks_name_code_mapping");
 		List<String> sql_list = new ArrayList<String>();
-		String regEx = "[[^0-9]&&[^_]&&[^.]]";
 		Date date = new Date();
 		SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd");
 		String str_day = simpledate.format(date);
-		Pattern p = Pattern.compile(regEx);
 		for (String str_city : list) {
-			String str = str_city.substring(2);
-			
-//			// 和讯网帖数
-//			StocksattitudeUtil stocksattitudeUtil_hxw = new StocksattitudeUtil();
-//			stocksattitudeUtil_hxw.setUrl("http://guba.hexun.com/" + str + ",guba.html");
-//			String st = stocksattitudeUtil_hxw.getJsString("pageText").split(",")[0];
-//			Matcher m = p.matcher(st);
-//			String hxw_t = m.replaceAll("").trim();
-//
-//			// 东方财富热线帖数和关注数 
-//			StocksattitudeUtil stocksattitudeUtil_df_g = new StocksattitudeUtil();
-//			stocksattitudeUtil_df_g.setUrl("http://guba.eastmoney.com/list," + str + ".html");
-//			String df_g = stocksattitudeUtil_df_g.getJsStringByClassName("strongc1",true);
-//			String df_t = stocksattitudeUtil_df_g.getJsStringByClassName("pager",true).split(" ")[1];
-//			System.out.println(df_g+"##############################"+df_t);
-			//腾讯股票
-			StocksattitudeUtil stocksattitudeUtil_tx_g = new StocksattitudeUtil();
-			stocksattitudeUtil_tx_g.setUrl("http://gu.qq.com/" + str_city);
-			String tx_up = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment  .bar_up .up",true);
-			String tx_down = stocksattitudeUtil_tx_g.getJsStringByCSS("#mod-comment .bar_down .down",true);
-			System.out.println(tx_up+"##############################"+tx_down);
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
+			StocksAttitudeAchieve a = new StocksAttitudeAchieve();
+			a.stocks_attitude_hxw(map, str_city);
+			a.stocks_attitude_dfzq(map, str_city);
+			a.stocks_attitude_QQ(map, str_city);
+			try{
+			a.stocks_attitude_ths(map, str_city);
+			}catch(Exception e)
+			{
+			}
+			list_str=map.get(str_city);
+			if(list_str!=null)
+			{
+				String sql_prefix="insert into stocks_attitude(stocks_code,stocks_attitude_hxw,stocks_attitude_dfcfw_guanzhu,stocks_attitude_dfcfw_tieshu,stocks_attitude_tx_kankao,stocks_attitude_tx_kankong,stocks_attitude_ths_guanzhu,stocks_date)values";
+				String sql =sql_prefix+"("+str_city.substring(2)+","+list_str.get(0)+","+list_str.get(1)+","+list_str.get(2)+","+list_str.get(3)+","+list_str.get(4)+","+list_str.get(5)+",'"+str_day+"');";
+				_Mysqlcommon.insert(sql);
+			}
 		}
-
-		// for (String sql : sql_list) {
-		// System.out.println(sql);
-		// _Mysqlcommon.insert(sql);
-		// }
 	}
 
+	
+	
+	
+	
 	public List<String> getStocksCodeList(String query_sql) {
 		ResultSet rs = null;
 		List<String> list = new ArrayList<String>();
