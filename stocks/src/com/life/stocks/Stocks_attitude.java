@@ -32,6 +32,7 @@ public class Stocks_attitude {
 	static MysqlConnectionPool pool = MysqlConnectionPool.getInstance();
 
 	Connection conn = null;
+
 	public static void main(String[] args) {
 		List<String> list_str = null;
 		Stocks_attitude s = new Stocks_attitude();
@@ -43,28 +44,37 @@ public class Stocks_attitude {
 		for (String str_city : list) {
 			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			StocksAttitudeAchieve a = new StocksAttitudeAchieve();
-			a.stocks_attitude_hxw(map, str_city);
-			a.stocks_attitude_dfzq(map, str_city);
-			a.stocks_attitude_QQ(map, str_city);
-			try{
-			a.stocks_attitude_ths(map, str_city);
-			}catch(Exception e)
-			{
+			try {
+				a.stocks_attitude_hxw(map, str_city);
+			} catch (Exception e) {
+				addnone(map,str_city,1);
 			}
-			list_str=map.get(str_city);
-			if(list_str!=null)
-			{
-				String sql_prefix="insert into stocks_attitude(stocks_code,stocks_attitude_hxw,stocks_attitude_dfcfw_guanzhu,stocks_attitude_dfcfw_tieshu,stocks_attitude_tx_kankao,stocks_attitude_tx_kankong,stocks_attitude_ths_guanzhu,stocks_date)values";
-				String sql =sql_prefix+"("+str_city.substring(2)+","+list_str.get(0)+","+list_str.get(1)+","+list_str.get(2)+","+list_str.get(3)+","+list_str.get(4)+","+list_str.get(5)+",'"+str_day+"');";
+			try {
+				a.stocks_attitude_dfzq(map, str_city);
+			} catch (Exception e) {
+				addnone(map,str_city,2);
+			}
+			try {
+				a.stocks_attitude_QQ(map, str_city);
+			} catch (Exception e) {
+				addnone(map,str_city,2);
+			}
+			try {
+				a.stocks_attitude_ths(map, str_city);
+			} catch (Exception e) {
+				addnone(map,str_city,1);
+			}
+			list_str = map.get(str_city);
+			if (list_str != null) {
+				String sql_prefix = "insert into stocks_attitude(stocks_code,stocks_attitude_hxw,stocks_attitude_dfcfw_guanzhu,stocks_attitude_dfcfw_tieshu,stocks_attitude_tx_kankao,stocks_attitude_tx_kankong,stocks_attitude_ths_guanzhu,stocks_date)values";
+				String sql = sql_prefix + "(" + str_city.substring(2) + "," + list_str.get(0) + "," + list_str.get(1)
+						+ "," + list_str.get(2) + "," + list_str.get(3) + "," + list_str.get(4) + "," + list_str.get(5)
+						+ ",'" + str_day + "');";
 				_Mysqlcommon.insert(sql);
 			}
 		}
 	}
 
-	
-	
-	
-	
 	public List<String> getStocksCodeList(String query_sql) {
 		ResultSet rs = null;
 		List<String> list = new ArrayList<String>();
@@ -82,5 +92,22 @@ public class Stocks_attitude {
 			pool.release(this.conn);
 		}
 		return list;
+	}
+
+	/**
+	 *@authorloukangwei
+	 *@date2016年4月13日 下午5:14:46
+	 *@returnTypevoid
+	 *@desc添加报错时处理数据为空的功能
+	 */
+	public static void addnone(Map<String, List<String>> map, String str_city,int n) {
+		List<String> _list = map.get(str_city);
+		if (_list == null) {
+			_list = new ArrayList<String>();
+		}
+		for(int i=0;i<n;i++)
+		{
+			_list.add("null");
+		}
 	}
 }
